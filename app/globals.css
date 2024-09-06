@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+html {
+  touch-action: none;
+}
+
+.score-board {
+  position: fixed;
+  z-index: 30;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: black;
+  color: white;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.score-board-wrap {
+  height: 100%;
+}
+.score-board-btn {
+  position: absolute;
+  z-index: 30;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5em;
+  padding: 10px 20px;
+}
+.start-btn {
+  position: absolute;
+  width: 50%;
+  height: 20%;
+  z-index: 30;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2.5rem !important;
+  padding: 10px 20px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+}
+
+.timer-container {
+  position: relative;
+  width: 160px;
+  height: 160px;
+}
+.timer-container p {
+  margin-top: -3.5em;
+}
+
+.timer-circle {
+  transition: all 0.8s ease;
+}
+
+.timer-time {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);  /* 中央に揃える */
+  font-size: 5em;
+  color: white;
+  text-align: center;
+}
+
+.count-destroy {
+  font-size: 2.5em;
+  margin-left: 30px;  /* 円と消した数の間に余白を追加 */
+}
+
+.pointer-item {
+  position: absolute;
+  z-index: 20;
+}
+
+.pointer {
+  animation: pointer 0.25s linear infinite;
+  animation-iteration-count: 1;
+  transform-origin: 50% 50%
+}
+
+@keyframes pointer {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.overlay-box {
+  animation: overlay-box 3s ease-out 0s infinite;
+  animation-iteration-count: 1;
+  align-items: center;
+  bottom: 250px;
+  color: #fff;
+  display: flex;
+  font-size: 50px;
+  height: 250px;
+  justify-content: center;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  z-index: 25;
+}
+
+@keyframes overlay-box {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.25;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(250px);
+  }
+}
+
+.cat {
+  position: absolute;
+  animation: move-cat 5s infinite ease-in-out;
+}
+
+@keyframes move-cat {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(300px, 300px);
+  }
+  50% {
+    transform: translate(270px, 30px);
+  }
+  75% {
+    transform: translate(0px, 270px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.button {
+  height: 3em;
+  width: 20%;
+  margin-top: 120px;
+}
+
+.video-wrap {
+  position: relative;
+}
+.video-wrap p {
+  font-family: serif;          
+  color: #fff;
+  font-size: 400%;
+  position: absolute;
+  left: 30%;
+  top: 200px;
+  z-index: 1;
+}
