@@ -57,7 +57,7 @@ html {
   font-size: 2.5rem !important;
   padding: 10px 20px;
   box-sizing: border-box;
-  border-radius: 10px;
+  border-radius: 20px !important;
   overflow: hidden;
   color: white !important;
 }
@@ -85,12 +85,12 @@ html {
   content: '';
   position: absolute;
   z-index: -1;
-  left: 6px;
-  top: 6px;
-  width: calc(100% - 12px);
-  height: calc(100% - 12px);
+  left: 12px;
+  top: 12px;
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
   background: #111;
-  border-radius: 5px;
+  border-radius: 13px;
 }
 
 .item {
