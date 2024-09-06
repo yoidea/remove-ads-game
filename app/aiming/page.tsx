@@ -1,5 +1,5 @@
 'use client'
-import React from "react"
+import React, { useMemo } from "react"
 import Modal from "react-modal"
 import { useTimer } from "react-timer-hook"
 import { FormEvent, useState, useRef, useEffect } from "react"
@@ -13,6 +13,7 @@ const skipSeconds = 2
 const maxLife = 3
 const defaultButtonSize = 20
 
+const hashTag = "広告消しチャレンジ"
 
 export default function Create() {
     const modalStyleBase: ReactModal.Styles = {
@@ -87,6 +88,11 @@ export default function Create() {
             background: `center / contain url('/ads/popup${v}.webp')`
         }
     })))
+
+    const shareText = useMemo(
+      () => `広告消しチャレンジで${countDestroy}個の広告を正確に消しました！（最終サイズ：${buttonSize}mm）`,
+      [buttonSize, countDestroy]
+    )
 
     useEffect(() => {
         // 物理ボタン入力受付
@@ -493,9 +499,26 @@ export default function Create() {
                     {showOverlay && <div className="clear-overlay-box" style={{
                         background: "center / contain url('/ads/overlay.webp')"
                     }}></div>}
-                    {gameClear && <button className="btn btn-warning btn-lg mb-3 score-board-btn2" onClick={() => {
-                        window.location.href = "/"
-                    }}>トップに戻る</button>}
+                    {gameClear && <>
+                        <button className="btn btn-warning btn-lg mb-3 score-board-btn2" onClick={() => {
+                            window.location.href = "/"
+                        }}>トップに戻る</button>
+                        <div className="flex flex-row score-board-share-row">
+                            <button className="btn btn-primary" onClick={() => {
+                                const params = new URLSearchParams()
+                                params.append("url", `${window.location.protocol}//${window.location.host}`)
+                                params.append("text", shareText)
+                                params.append("hashtags", hashTag)
+                                window.open(`https://twitter.com/intent/tweet?${params.toString()}`)
+                            }}>Twitterでシェア</button>
+                            <button className="btn btn-success" onClick={() => {
+                                const params = new URLSearchParams()
+                                params.append("url", `${window.location.protocol}//${window.location.host}`)
+                                params.append("text", `${shareText} #${hashTag}`)
+                                window.open(`https://misskeyshare.link/share.html?${params.toString()}`)
+                            }}>Misskeyでシェア</button>
+                        </div>
+                    </>}
                     {gameClear && <button className="btn btn-primary btn-lg mb-3 score-board-btn" onClick={handleGameStart}>もう一度チャレンジ</button>}
                     <div className="pointer-item" style={{left: pointer[0]-40, top: pointer[1]-40, display: playing ? pointerDisplay : "none"}}>
                         <svg className="pointer" width="80" height="80">
