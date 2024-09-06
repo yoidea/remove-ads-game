@@ -1,8 +1,8 @@
 {
-  "name": "vercel-kv-redis-starter",
-  "repository": "https://github.com/vercel/examples.git",
+  "name": "remove-ads-game",
+  "repository": "https://github.com/yoidea/remove-ads-game",
   "license": "MIT",
-  "version": "0.0.0",
+  "version": "0.9.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,15 +11,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "@types/node": "18.15.11",
     "@types/react": "18.0.37",
     "@types/react-dom": "18.0.11",
-    "@upstash/ratelimit": "^1.0.3",
-    "@vercel/edge": "^1.1.1",
-    "@vercel/kv": "0.2.1",
-    "autoprefixer": "10.4.14",
     "bootstrap": "^5.3.0",
-    "crypto-js": "^4.2.0",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
     "next": "13.4.13",
@@ -28,12 +24,9 @@
     "react-dom": "18.2.0",
     "react-timer-hook": "^3.0.7",
     "tailwindcss": "3.3.1",
-    "typescript": "5.0.4",
-    "uqr": "^0.1.2"
+    "typescript": "5.0.4"
   },
   "devDependencies": {
-    "@types/crypto-js": "^4.2.2",
-    "@types/ms": "^0.7.31",
     "@types/react-modal": "^3.16.3",
     "react-modal": "^3.16.1",
     "turbo": "^1.9.3"
