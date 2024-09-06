@@ -31,7 +31,7 @@ html {
 .score-board-btn {
   position: absolute;
   z-index: 30;
-  top: 60%;
+  top: 90%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 1.5em;
@@ -45,6 +45,9 @@ html {
   transform: translate(-50%, -50%);
   font-size: 1.5em;
   padding: 10px 20px;
+  width: 35%;
+  height: 8%;
+  font-size: 2rem !important;
 }
 .start-btn {
   position: relative;

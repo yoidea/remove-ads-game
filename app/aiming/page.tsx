@@ -55,6 +55,11 @@ export default function Create() {
         borderRadius: "4px"
 
     }
+    const ramdomList: number[] = [];
+        while (ramdomList.length < numberOfAds) {
+            const num = Math.floor(Math.random() * 20) + 1;
+        if (!ramdomList.includes(num)) ramdomList.push(num);
+    }
     const audioContextRef = useRef<AudioContext | null>(null)
     const audioBuffersRef = useRef<{[key: string]: AudioBuffer}>({})
     const BGMSourceRef = useRef<AudioBufferSourceNode | null>(null)
@@ -73,13 +78,13 @@ export default function Create() {
     const [fullScreenAdButtonText, setFullScreenAdButtonText] = useState("2秒後にスキップ")
     const [fullScreenAdButtonEnabled, setFullScreenAdButtonEnabled] = useState(false)
     const [modalStyle, setModalStyle] = useState(modalStyleBase)
-    const [modalsStyle, setModalsStyle] = useState([...Array(numberOfAds)].map(() => ({
+    const [modalsStyle, setModalsStyle] = useState(ramdomList.map((v) => ({
         ...modalStyleBase,
         content: {
             ...modalStyleBase.content,
             top: `${Math.random() * 70}%`,
             left: `${Math.random() * 65}%`,
-            background: `center / contain url('/ads/popup${Math.ceil(Math.random() * 20)}.webp')`
+            background: `center / contain url('/ads/popup${v}.webp')`
         }
     })))
 
@@ -190,6 +195,11 @@ export default function Create() {
     }, [])
 
     const regenerateModalsStyle = () => {
+        const ramdomList: number[] = [];
+            while (ramdomList.length < numberOfAds) {
+                const num = Math.floor(Math.random() * 20) + 1;
+            if (!ramdomList.includes(num)) ramdomList.push(num);
+        }
         playSound("open")
         setColor("blue")
         setTimeout(() => {
@@ -212,13 +222,13 @@ export default function Create() {
         } else {
             setButtonSize(0.1)
         }
-        const modalsStyle = [...Array(numberOfAds)].map(() => ({
+        const modalsStyle = ramdomList.map((v) => ({
             ...modalStyleBase,
             content: {
                 ...modalStyleBase.content,
                 top: `${Math.random() * 70}%`,
                 left: `${Math.random() * 65}%`,
-                background: `center / contain url('/ads/popup${Math.ceil(Math.random() * 20)}.webp')`
+                background: `center / contain url('/ads/popup${v}.webp')`
             }
         }))
         setModalsStyle(modalsStyle)
