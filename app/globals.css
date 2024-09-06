@@ -40,9 +40,9 @@ html {
 .start-btn {
   position: absolute;
   width: 50%;
-  height: 20%;
+  height: 15%;
   z-index: 30;
-  top: 60%;
+  top: 80%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 2.5rem !important;

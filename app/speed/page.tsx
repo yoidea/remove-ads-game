@@ -104,10 +104,12 @@ export default function Create() {
         // 物理ボタン入力受付
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.code === 'ArrowLeft') {
-                console.log("left")
+                // TOPに戻る
+                window.location.href = "/"
             }
             if (e.code === 'ArrowRight') {
-                console.log("right")
+                // ゲームスタート
+                handleGameStart()
             }
         }
         // タップした場所にエフェクト
@@ -325,7 +327,7 @@ export default function Create() {
                     bottom: "4rem",
                     width: "85%",
                     height: "75%",
-                    background: "url('/ads/initial.webp')",
+                    background: "url('/introduction/slide1.png')",
                     backgroundSize: "cover",
                 }
             }}
