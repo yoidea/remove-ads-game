@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 const hueBridgeIP = process.env.NEXT_PUBLIC_HUE_BRIDGE_IP
 const hueUser = process.env.NEXT_PUBLIC_HUE_USER
 const numberOfAds = 10
-const timerSeconds = 1
+const timerSeconds = 30
 
 const hashTag = "広告消しチャレンジ"
 
