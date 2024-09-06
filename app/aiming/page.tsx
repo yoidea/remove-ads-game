@@ -5,10 +5,13 @@ import { useTimer } from "react-timer-hook"
 import { FormEvent, useState, useRef, useEffect } from "react"
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-// https://discovery.meethue.com
-const hueBridgeIP = "192.168.0.106"
-const numberOfAds = 10
-const timerSeconds = 30
+
+const hueBridgeIP = process.env.NEXT_PUBLIC_HUE_BRIDGE_IP
+const hueUser = process.env.NEXT_PUBLIC_HUE_USER
+const numberOfAds = 5
+const skipSeconds = 2
+const maxLife = 5
+const defaultButtonSize = 20
 
 
 export default function Create() {
@@ -57,6 +60,8 @@ export default function Create() {
     const BGMSourceRef = useRef<AudioBufferSourceNode | null>(null)
     const [countDestroy, setCountDestroy] = useState(0)
     const [countMistake, setCountMistake] = useState(0)
+    const [life, setLife] = useState(maxLife)
+    const [buttonSize, setButtonSize] = useState(defaultButtonSize)
     const [gameClear, setGameClear] = useState(false)
     const [playing, setPlaying] = useState(false)
     const [showOverlay, setShowOverlay] = useState(false)
@@ -66,7 +71,6 @@ export default function Create() {
     const [fullScreenAdOpen, setFullScreenAdOpen] = useState<boolean>(false)
     const [initialAdOpen, setInitialAdOpen] = useState<boolean>(true)
     const [fullScreenAdButtonText, setFullScreenAdButtonText] = useState("2秒後にスキップ")
-    const [fullScreenAdButtonEnabled, setFullScreenAdButtonEnabled] = useState(false)
     const [modalStyle, setModalStyle] = useState(modalStyleBase)
     const [modalsStyle, setModalsStyle] = useState([...Array(numberOfAds)].map(() => ({
         ...modalStyleBase,
@@ -77,27 +81,6 @@ export default function Create() {
             background: `center / contain url('/ads/popup${Math.ceil(Math.random() * 20)}.webp')`
         }
     })))
-
-    // 制限時間からDateオブジェクトを作成
-    const expiryTimestamp = new Date();
-    expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + timerSeconds);
-    const {
-        seconds,
-        minutes,
-        hours,
-        isRunning,
-        start,
-        pause,
-        resume,
-        restart,
-    } = useTimer({
-        expiryTimestamp,
-        onExpire: () => {
-            console.log("onExpire called")
-            handleGameClear()
-        },
-        autoStart: false
-    })
 
     useEffect(() => {
         // 物理ボタン入力受付
@@ -189,6 +172,13 @@ export default function Create() {
                     audioBuffersRef.current.bgm = data
                 })
                 .catch(error => console.error('Audio error', error))
+            fetch('/bgm2.mp3')
+                .then(response => response.arrayBuffer())
+                .then(buffer => audioContext.decodeAudioData(buffer))
+                .then(data => {
+                    audioBuffersRef.current.bgm2 = data
+                })
+                .catch(error => console.error('Audio error', error))
         }
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
@@ -198,8 +188,23 @@ export default function Create() {
 
     const regenerateModalsStyle = () => {
         playSound("open")
-        setShowOverlay(true)
-        setTimeout(setShowOverlay, 3000, false)
+        setColor("blue")
+        setTimeout(() => {
+            setColor("yellow")
+        }, 500)
+        if (buttonSize > 10) {
+            setButtonSize(buttonSize - 2)    
+        } else if (buttonSize > 3) {
+            setButtonSize(buttonSize - 1)
+        } else if (buttonSize > 2) {
+            setButtonSize((buttonSize * 10 - 5) / 10)
+        } else if (buttonSize > 1) {
+            setButtonSize((buttonSize * 10 - 2) / 10)
+        } else if (buttonSize > 0.1) {
+            setButtonSize((buttonSize * 10 - 1) / 10)
+        } else {
+            setButtonSize(0.1)
+        }
         const modalsStyle = [...Array(numberOfAds)].map(() => ({
             ...modalStyleBase,
             content: {
@@ -214,8 +219,7 @@ export default function Create() {
 
     const request2hue = (body: any) => {
         const url = `http://${hueBridgeIP}/api`
-        const user = "cE3z-eMLT-XbBbmkmtBLiKvmfzmk0Cu8mkovh90C"
-        // fetch(`${url}/${user}/lights/1/state`, {
+        // fetch(`${url}/${hueUser}/lights/1/state`, {
         //     "method": "PUT",
         //     "body": JSON.stringify(body)
         // })
@@ -251,6 +255,7 @@ export default function Create() {
 
     const setBGM = (name: string) => {
         const buffer = audioBuffersRef.current[name]
+        console.log(buffer)
         if (audioContextRef.current && buffer) {
             const gain = audioContextRef.current.createGain()
             gain.gain.value = 0.3
@@ -265,17 +270,15 @@ export default function Create() {
     }
 
     const handleGameStart = () => {
+        setLife(5)
         setInitialAdOpen(false)
         setGameClear(false)
         setPlaying(true)
-        const expiryTimestamp = new Date();
-        expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + timerSeconds);
-        restart(expiryTimestamp)
         setCountDestroy(0)
         setCountMistake(0)
         setColor("yellow")
         playSound("start")
-        setBGM("bgm")
+        setBGM("bgm2")
         setModalsOpen([...Array(numberOfAds).fill(true)])
     }
 
@@ -283,6 +286,7 @@ export default function Create() {
         setCountMistake(countMistake + 1)
         setShowOverlay(false)
         setFullScreenAdOpen(true)
+        setLife(life - 1)
         playSound("miss")
         setColor("red")
         setTimeout(() => {
@@ -298,13 +302,14 @@ export default function Create() {
     }
 
     const handleGameClear = () => {
+        setLife(life - 1)
         setGameClear(true)
         setFullScreenAdOpen(false)
         setPlaying(false)
         setModalsOpen([...Array(numberOfAds).fill(false)])
         playSound("clear")
         stopBGM()
-        setColor("green")
+        setColor("red")
         setTimeout(() => {
             setColor("blue")
         }, 500)
@@ -358,25 +363,18 @@ export default function Create() {
                     backgroundSize: "cover"
                 }
             }}
-            onAfterOpen={() => {
-                setFullScreenAdButtonText("2秒後にスキップ")
-                setFullScreenAdButtonEnabled(false)
-                setTimeout(setFullScreenAdButtonText, 1000, "1秒後にスキップ")
-                setTimeout(setFullScreenAdButtonText, 2000, "広告をスキップ")
-                setTimeout(setFullScreenAdButtonEnabled, 2000, true)
-            }}
         >
             {/* @ts-ignore */}
             <div style={{ width: "100%", height: "100%" }}>
                 <button onClick={(e) => {
                     e.stopPropagation()
-                    if (!fullScreenAdButtonEnabled) {
-                        playSound("miss")
-                        return
-                    }
                     setFullScreenAdOpen(false)
                     playSound("close4")
-                }} style={iconSkipStyle}>{fullScreenAdButtonText}</button>
+                    setColor("green")
+                    setTimeout(() => {
+                        setColor("yellow")
+                    }, 500)
+                }} style={iconSkipStyle}>広告を閉じる</button>
                 <img className="cat" src="/ads/cat1.webp" alt="" />
             </div>
         </Modal>
@@ -385,7 +383,13 @@ export default function Create() {
     const PopupAds = modalsStyle.map((style, key) => (
         <Modal isOpen={modalsOpen[key]} style={style} key={key}>
             {/* @ts-ignore */}
-            <div onClick={handleTapMissArea} style={{ width: "100%", height: "100%" }}>
+            <div onClick={() => {
+                if (life <= 1) {
+                    handleGameClear()
+                } else {
+                    handleTapMissArea()    
+                }
+            }} style={{ width: "100%", height: "100%" }}>
                 <button onClick={(e) => {
                     e.stopPropagation()
                     playSound(`close${Math.ceil(Math.random()*3)}`)
@@ -400,7 +404,12 @@ export default function Create() {
                         handleTapButton()
                     }
                     setCountDestroy(countDestroy + 1)
-                }} style={iconCloseStyle}>☒</button>
+                }} style={{
+                    ...iconCloseStyle, 
+                    fontSize: `${buttonSize}mm`,
+                    top: `${(20-buttonSize) / 20 * 4}mm`,
+                    right: "4.25mm",
+                }}>☒</button>
             </div>
         </Modal>
     ))
@@ -414,17 +423,16 @@ export default function Create() {
                     {FullScreenAd}
                     <div className={`${gameClear ? "score-board score-board-wrap" : "score-board"}`}>
                         <div className="item">
-                            <div className="timer-container">
-                                <svg width="160" height="160">
-                                    <circle id="circle" className="timer-circle"
-                                        r="60" cy="80" cx="80" transform="rotate(270, 80, 80)"
-                                        stroke-dasharray="377" stroke-dashoffset={`${-376 * (seconds / timerSeconds)}`}
-                                        stroke-width="8" stroke="#26a79a" fill="none"/>
-                                </svg>
-                                <div className="timer-time">
-                                    {seconds}                                    
+                            <div className="life-container">
+                                <div className="life">
+                                    <span className="life-active">
+                                        {"♥".repeat(life)}
+                                    </span>
+                                    <span>
+                                        {"♥".repeat(maxLife-life)}
+                                    </span>
                                 </div>
-                                <p>残り時間</p>
+                                <p>残りライフ</p>
                             </div>
                         </div>
                         <div className="item">
@@ -444,24 +452,20 @@ export default function Create() {
                         <div className="item">
                             <div className="timer-container">
                                 <svg width="160" height="160">
-                                    <circle id="circle" className="timer-circle"
-                                        r="60" cy="80" cx="80" transform="rotate(-90, 80, 80)"
-                                        stroke-dasharray="377" stroke-dashoffset="0"
-                                        stroke-width="8" stroke="#e91e63" fill="none"/>
+                                    <rect id="rect" className="timer-rect"
+                                        width="115" height="115" x="22.5" y="22.5" transform="rotate(-90, 80, 80)"
+                                        stroke-width="8" stroke="#26a79a" fill="none"/>
                                 </svg>
-                                <div className="timer-time">
-                                    {(() => {
-                                        const missRate = Math.round(countMistake * 100 / (countDestroy + countMistake))
-                                        return Number.isNaN(missRate) ? 0 : missRate
-                                    })()}
+                                <div className="size">
+                                    {buttonSize}<span style={{fontSize: "0.5em"}}>mm</span>
                                 </div>
-                                <p>ミス率%</p>
+                                <p>ボタンサイズ</p>
                             </div>
                         </div>
                     </div>
-                    {showOverlay && <div className="overlay-box" style={{
+                    {showOverlay && <div className="clear-overlay-box" style={{
                         background: "center / contain url('/ads/overlay.webp')"
-                    }} onClick={handleTapMissArea}></div>}
+                    }}></div>}
                     {gameClear && <button className="btn btn-primary btn-lg mb-3 score-board-btn" onClick={handleGameStart}>もう一度チャレンジ</button>}
                     <div className="pointer-item" style={{left: pointer[0]-40, top: pointer[1]-40, display: playing ? pointerDisplay : "none"}}>
                         <svg className="pointer" width="80" height="80">

@@ -54,6 +54,28 @@ html {
   align-items: center;
 }
 
+.life-container {
+  position: relative;
+  width: 320px;
+  height: 160px;
+}
+.life-container p {
+  margin-top: 6.5em;
+}
+
+.life {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4em;
+  color: grey;
+  text-align: center;
+}
+.life-active {
+  color: #e91e63;
+}
+
 .timer-container {
   position: relative;
   width: 160px;
@@ -71,15 +93,24 @@ html {
   position: absolute;
   top: 45%;
   left: 50%;
-  transform: translate(-50%, -50%);  /* 中央に揃える */
+  transform: translate(-50%, -50%);
   font-size: 5em;
+  color: white;
+  text-align: center;
+}
+.size {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3.5em;
   color: white;
   text-align: center;
 }
 
 .count-destroy {
   font-size: 2.5em;
-  margin-left: 30px;  /* 円と消した数の間に余白を追加 */
+  margin-left: 30px;
 }
 
 .pointer-item {
@@ -99,6 +130,31 @@ html {
   }
   to {
     transform: scale(1);
+  }
+}
+
+.clear-overlay-box {
+  animation: clear-overlay-box 3s ease-out 0s infinite;
+  animation-iteration-count: 1;
+  align-items: center;
+  top: 40%;
+  color: #fff;
+  display: flex;
+  font-size: 50px;
+  height: 250px;
+  justify-content: center;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  z-index: 25;
+}
+
+@keyframes clear-overlay-box {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
 
@@ -158,17 +214,4 @@ html {
   height: 3em;
   width: 20%;
   margin-top: 120px;
-}
-
-.video-wrap {
-  position: relative;
-}
-.video-wrap p {
-  font-family: serif;          
-  color: #fff;
-  font-size: 400%;
-  position: absolute;
-  left: 30%;
-  top: 200px;
-  z-index: 1;
 }

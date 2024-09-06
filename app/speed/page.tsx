@@ -10,7 +10,6 @@ const hueBridgeIP = process.env.NEXT_PUBLIC_HUE_BRIDGE_IP
 const hueUser = process.env.NEXT_PUBLIC_HUE_USER
 const numberOfAds = 10
 const timerSeconds = 30
-const skipSeconds = 2
 
 
 export default function Create() {
@@ -202,6 +201,8 @@ export default function Create() {
         playSound("open")
         setShowOverlay(true)
         setTimeout(setShowOverlay, 3000, false)
+        setColor("blue")
+        setTimeout(setColor, 500, "yellow")
         const modalsStyle = [...Array(numberOfAds)].map(() => ({
             ...modalStyleBase,
             content: {
@@ -286,9 +287,6 @@ export default function Create() {
         setFullScreenAdOpen(true)
         playSound("miss")
         setColor("red")
-        setTimeout(() => {
-            setColor("yellow")
-        }, 500)
     }
 
     const handleTapButton = () => {        
@@ -365,6 +363,7 @@ export default function Create() {
                 setTimeout(setFullScreenAdButtonText, 1000, "1秒後にスキップ")
                 setTimeout(setFullScreenAdButtonText, 2000, "広告をスキップ")
                 setTimeout(setFullScreenAdButtonEnabled, 2000, true)
+                setTimeout(setColor, 2000, "green")
             }}
         >
             {/* @ts-ignore */}
@@ -377,6 +376,7 @@ export default function Create() {
                     }
                     setFullScreenAdOpen(false)
                     playSound("close4")
+                    setColor("yellow")
                 }} style={iconSkipStyle}>{fullScreenAdButtonText}</button>
                 <img className="cat" src="/ads/cat1.webp" alt="" />
             </div>
