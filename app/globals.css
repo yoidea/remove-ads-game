@@ -37,8 +37,17 @@ html {
   font-size: 1.5em;
   padding: 10px 20px;
 }
-.start-btn {
+.score-board-btn2 {
   position: absolute;
+  z-index: 30;
+  top: 65%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5em;
+  padding: 10px 20px;
+}
+.start-btn {
+  position: relative;
   width: 50%;
   height: 15%;
   z-index: 30;
@@ -47,6 +56,41 @@ html {
   transform: translate(-50%, -50%);
   font-size: 2.5rem !important;
   padding: 10px 20px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  overflow: hidden;
+  color: white !important;
+}
+@keyframes rotate {
+  100% {
+    -webkit-transform: rotate(1turn);
+    transform: rotate(1turn);
+  }
+}
+.start-btn::before {
+  content: '';
+  position: absolute;
+  z-index: -2;
+  left: -50%;
+  top: -50%;
+  width: 200%;
+  height: 450%;
+  background-repeat: no-repeat;
+  background-size: 120% 120%, 120% 120%;
+  background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+  background-image: linear-gradient(45deg, red, red, red, orange, yellow, green, blue, indigo, violet, violet, violet);
+  animation: rotate 4s linear infinite;
+}
+.start-btn::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 6px;
+  top: 6px;
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
+  background: #111;
+  border-radius: 5px;
 }
 
 .item {
@@ -56,7 +100,7 @@ html {
 
 .life-container {
   position: relative;
-  width: 320px;
+  width: 200px;
   height: 160px;
 }
 .life-container p {

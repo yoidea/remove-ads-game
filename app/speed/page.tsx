@@ -334,7 +334,7 @@ export default function Create() {
         >
             {/* @ts-ignore */}
             <div style={{ width: "100%", height: "100%" }}>
-                <button className="btn btn-danger btn-lg mb-3 start-btn" onClick={handleGameStart}>チャレンジ開始</button>
+                <button className="btn btn-lg mb-3 start-btn" onClick={handleGameStart}>チャレンジ開始</button>
             </div>
         </Modal>
     )
@@ -380,7 +380,7 @@ export default function Create() {
                     playSound("close4")
                     setColor("yellow")
                 }} style={iconSkipStyle}>{fullScreenAdButtonText}</button>
-                <img className="cat" src="/ads/cat1.webp" alt="" />
+                <img className="cat" src="/ads/cat1.webp" alt="猫" />
             </div>
         </Modal>
     )
@@ -465,6 +465,9 @@ export default function Create() {
                     {showOverlay && <div className="overlay-box" style={{
                         background: "center / contain url('/ads/overlay.webp')"
                     }} onClick={handleTapMissArea}></div>}
+                    {gameClear && <button className="btn btn-warning btn-lg mb-3 score-board-btn2" onClick={() => {
+                        window.location.href = "/"
+                    }}>トップに戻る</button>}
                     {gameClear && <button className="btn btn-primary btn-lg mb-3 score-board-btn" onClick={handleGameStart}>もう一度チャレンジ</button>}
                     <div className="pointer-item" style={{left: pointer[0]-40, top: pointer[1]-40, display: playing ? pointerDisplay : "none"}}>
                         <svg className="pointer" width="80" height="80">

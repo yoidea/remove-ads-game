@@ -10,7 +10,7 @@ const hueBridgeIP = process.env.NEXT_PUBLIC_HUE_BRIDGE_IP
 const hueUser = process.env.NEXT_PUBLIC_HUE_USER
 const numberOfAds = 5
 const skipSeconds = 2
-const maxLife = 5
+const maxLife = 3
 const defaultButtonSize = 20
 
 
@@ -71,6 +71,7 @@ export default function Create() {
     const [fullScreenAdOpen, setFullScreenAdOpen] = useState<boolean>(false)
     const [initialAdOpen, setInitialAdOpen] = useState<boolean>(true)
     const [fullScreenAdButtonText, setFullScreenAdButtonText] = useState("2秒後にスキップ")
+    const [fullScreenAdButtonEnabled, setFullScreenAdButtonEnabled] = useState(false)
     const [modalStyle, setModalStyle] = useState(modalStyleBase)
     const [modalsStyle, setModalsStyle] = useState([...Array(numberOfAds)].map(() => ({
         ...modalStyleBase,
@@ -194,8 +195,12 @@ export default function Create() {
         setTimeout(() => {
             setColor("yellow")
         }, 500)
-        if (buttonSize > 10) {
-            setButtonSize(buttonSize - 2)    
+        if (buttonSize > 15) {
+            setButtonSize(buttonSize - 5)
+        } else if (buttonSize > 7) {
+            setButtonSize(buttonSize - 3)
+        } else if (buttonSize > 5) {
+            setButtonSize(buttonSize - 2)
         } else if (buttonSize > 3) {
             setButtonSize(buttonSize - 1)
         } else if (buttonSize > 2) {
@@ -272,7 +277,8 @@ export default function Create() {
     }
 
     const handleGameStart = () => {
-        setLife(5)
+        setLife(maxLife)
+        setButtonSize(defaultButtonSize)
         setInitialAdOpen(false)
         setGameClear(false)
         setPlaying(true)
@@ -340,7 +346,7 @@ export default function Create() {
         >
             {/* @ts-ignore */}
             <div style={{ width: "100%", height: "100%" }}>
-                <button className="btn btn-danger btn-lg mb-3 start-btn" onClick={handleGameStart}>チャレンジ開始</button>
+                <button className="btn btn-lg mb-3 start-btn" onClick={handleGameStart}>チャレンジ開始</button>
             </div>
         </Modal>
     )
@@ -365,19 +371,28 @@ export default function Create() {
                     backgroundSize: "cover"
                 }
             }}
+            onAfterOpen={() => {
+                setFullScreenAdButtonText("2秒後にスキップ")
+                setFullScreenAdButtonEnabled(false)
+                setTimeout(setFullScreenAdButtonText, 1000, "1秒後にスキップ")
+                setTimeout(setFullScreenAdButtonText, 2000, "広告をスキップ")
+                setTimeout(setFullScreenAdButtonEnabled, 2000, true)
+                setTimeout(setColor, 2000, "green")
+            }}
         >
             {/* @ts-ignore */}
             <div style={{ width: "100%", height: "100%" }}>
                 <button onClick={(e) => {
                     e.stopPropagation()
+                    if (!fullScreenAdButtonEnabled) {
+                        playSound("miss")
+                        return
+                    }
                     setFullScreenAdOpen(false)
                     playSound("close4")
-                    setColor("green")
-                    setTimeout(() => {
-                        setColor("yellow")
-                    }, 500)
-                }} style={iconSkipStyle}>広告を閉じる</button>
-                <img className="cat" src="/ads/cat1.webp" alt="" />
+                    setColor("yellow")
+                }} style={iconSkipStyle}>{fullScreenAdButtonText}</button>
+                <img className="cat" src="/ads/cat1.webp" alt="猫" />
             </div>
         </Modal>
     )
@@ -468,6 +483,9 @@ export default function Create() {
                     {showOverlay && <div className="clear-overlay-box" style={{
                         background: "center / contain url('/ads/overlay.webp')"
                     }}></div>}
+                    {gameClear && <button className="btn btn-warning btn-lg mb-3 score-board-btn2" onClick={() => {
+                        window.location.href = "/"
+                    }}>トップに戻る</button>}
                     {gameClear && <button className="btn btn-primary btn-lg mb-3 score-board-btn" onClick={handleGameStart}>もう一度チャレンジ</button>}
                     <div className="pointer-item" style={{left: pointer[0]-40, top: pointer[1]-40, display: playing ? pointerDisplay : "none"}}>
                         <svg className="pointer" width="80" height="80">
