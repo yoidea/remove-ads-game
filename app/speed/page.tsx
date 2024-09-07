@@ -229,10 +229,10 @@ export default function Create() {
 
     const request2hue = (body: any) => {
         const url = `http://${hueBridgeIP}/api`
-        // fetch(`${url}/${hueUser}/lights/1/state`, {
-        //     "method": "PUT",
-        //     "body": JSON.stringify(body)
-        // })
+        fetch(`${url}/${hueUser}/lights/1/state`, {
+            "method": "PUT",
+            "body": JSON.stringify(body)
+        })
     }
 
     const setColor = (color: "red" | "green" | "yellow" | "blue") => {
