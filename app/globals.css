@@ -49,6 +49,15 @@ html {
   height: 8%;
   font-size: 2rem !important;
 }
+.score-board-share-row {
+  position: absolute;
+  z-index: 30;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5em;
+  gap: 10px;
+}
 .start-btn {
   position: relative;
   width: 50%;
