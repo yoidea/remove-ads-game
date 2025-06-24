@@ -16,5 +16,5 @@ export const setColor = (color: "red" | "green" | "yellow" | "blue") => {
 		yellow: 7377,
 		blue: 45610,
 	}
-	// request2hue({ hue: value[color] })
+	request2hue({ hue: value[color] })
 }
