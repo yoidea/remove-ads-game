@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { CustomModal } from "@/components/ui/CustomModal"
-import { modalStyleBase, iconSkipStyle } from "@/components/ui/ModalStyles"
 import { setColor } from "@/lib/hue"
 
 interface FullScreenAdProps {
@@ -50,23 +49,11 @@ export const FullScreenAd = ({
 	return (
 		<CustomModal
 			isOpen={isOpen}
+			overlayClassName="fullscreen-ad-overlay max-w-4xl mx-auto"
+			contentClassName="fullscreen-ad-content max-w-4xl mx-auto"
 			style={{
-				overlay: {
-					...modalStyleBase.overlay,
-					pointerEvents: "auto",
-					backgroundColor: "rgba(0,0,0,0.5)",
-				},
-				content: {
-					...modalStyleBase.content,
-					top: "4rem",
-					left: "4rem",
-					right: "4rem",
-					bottom: "4rem",
-					width: "85%",
-					height: "75%",
-					background: "url('/ads/rainbow.webp')",
-					backgroundSize: "cover",
-				},
+				background: "url('/ads/rainbow.webp')",
+				backgroundSize: "cover",
 			}}
 		>
 			<div style={{ width: "100%", height: "100%" }}>
@@ -75,11 +62,11 @@ export const FullScreenAd = ({
 						e.stopPropagation()
 						handleClose()
 					}}
-					style={iconSkipStyle}
+					className="icon-skip text-md md:text-3xl"
 				>
 					{buttonText}
 				</button>
-				<img className="cat" src="/ads/cat1.webp" alt="猫" />
+				<img className="cat w-[40%]" src="/ads/cat1.webp" alt="猫" />
 			</div>
 		</CustomModal>
 	)

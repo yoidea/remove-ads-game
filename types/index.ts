@@ -1,6 +1,9 @@
-import React from "react"
-
-export type ModalStyle = {
-	overlay: React.CSSProperties
-	content: React.CSSProperties
+export type ModalContentStyle = {
+	content: {
+		top?: string
+		left?: string
+		right?: string
+		bottom?: string
+		background?: string
+	}
 }

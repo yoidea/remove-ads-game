@@ -1,8 +1,9 @@
 "use client"
+
 import { useState, useEffect } from "react"
 import { useSound } from "@/hooks/useSound"
 import { setColor } from "@/lib/hue"
-import { modalStyleBase } from "@/components/ui/ModalStyles"
+import { ModalContentStyle } from "@/types"
 
 const NUMBER_OF_ADS = 5
 const MAX_LIFE = 3
@@ -29,11 +30,9 @@ export const useAimingGame = () => {
 		if (!ramdomList.includes(num)) ramdomList.push(num)
 	}
 
-	const [modalsStyle, setModalsStyle] = useState(
+	const [modalsStyle, setModalsStyle] = useState<ModalContentStyle[]>(
 		ramdomList.map((v) => ({
-			...modalStyleBase,
 			content: {
-				...modalStyleBase.content,
 				top: `${Math.random() * 70}%`,
 				left: `${Math.random() * 65}%`,
 				background: `center / contain url('/ads/popup${v}.webp')`,
@@ -98,9 +97,7 @@ export const useAimingGame = () => {
 			setButtonSize(0.1)
 		}
 		const newModalsStyle = ramdomList.map((v) => ({
-			...modalStyleBase,
 			content: {
-				...modalStyleBase.content,
 				top: `${Math.random() * 70}%`,
 				left: `${Math.random() * 65}%`,
 				background: `center / contain url('/ads/popup${v}.webp')`,

@@ -1,22 +1,25 @@
 "use client"
 
 import { useEffect, useRef, ReactNode } from "react"
-import { ModalStyle } from "@/types"
 
 interface CustomModalProps {
 	isOpen: boolean
 	onClose?: () => void
 	onAfterOpen?: () => void
-	style: ModalStyle
+	overlayClassName?: string
+	contentClassName?: string
 	children: ReactNode
+	style?: React.CSSProperties
 }
 
 export const CustomModal = ({
 	isOpen,
 	onClose,
 	onAfterOpen,
-	style,
+	overlayClassName,
+	contentClassName,
 	children,
+	style,
 }: CustomModalProps) => {
 	const modalRef = useRef<HTMLDivElement>(null)
 
@@ -37,8 +40,14 @@ export const CustomModal = ({
 	}
 
 	return (
-		<div ref={modalRef} style={style.overlay} onClick={handleOverlayClick}>
-			<div style={style.content}>{children}</div>
+		<div
+			ref={modalRef}
+			className={overlayClassName || "modal-overlay"}
+			onClick={handleOverlayClick}
+		>
+			<div className={contentClassName || "modal-content"} style={style}>
+				{children}
+			</div>
 		</div>
 	)
 }

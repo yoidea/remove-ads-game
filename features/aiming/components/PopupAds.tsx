@@ -1,10 +1,10 @@
 "use client"
 
 import { CustomModal } from "@/components/ui/CustomModal"
-import { iconCloseStyle } from "@/components/ui/ModalStyles"
+import { ModalContentStyle } from "@/types"
 
 interface PopupAdsProps {
-	modalsStyle: any[]
+	modalsStyle: ModalContentStyle[]
 	modalsOpen: boolean[]
 	life: number
 	handleGameClear: () => void
@@ -37,7 +37,13 @@ export const PopupAds = ({
 	return (
 		<>
 			{modalsStyle.map((style, key) => (
-				<CustomModal isOpen={modalsOpen[key]} style={style} key={key}>
+				<CustomModal
+					isOpen={modalsOpen[key]}
+					style={style.content}
+					overlayClassName="popup-ad-overlay max-w-4xl mx-auto"
+					contentClassName="popup-ad-content max-w-4xl mx-auto"
+					key={key}
+				>
 					<div
 						onClick={() => {
 							if (life <= 1) {
@@ -66,8 +72,8 @@ export const PopupAds = ({
 								}
 								setCountDestroy(countDestroy + 1)
 							}}
+							className="icon-close"
 							style={{
-								...iconCloseStyle,
 								fontSize: `${buttonSize}mm`,
 								top: `${((20 - buttonSize) / 20) * 4}mm`,
 								right: "4.25mm",

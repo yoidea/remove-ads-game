@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import { useTimer } from "react-timer-hook"
 import { useSound } from "@/hooks/useSound"
 import { setColor } from "@/lib/hue"
-import { modalStyleBase } from "@/components/ui/ModalStyles"
+import { ModalContentStyle } from "@/types"
 
 const NUMBER_OF_ADS = 10
 const TIMER_SECONDS = 30
@@ -27,11 +27,9 @@ export const useSpeedGame = () => {
 		if (!ramdomList.includes(num)) ramdomList.push(num)
 	}
 
-	const [modalsStyle, setModalsStyle] = useState(
+	const [modalsStyle, setModalsStyle] = useState<ModalContentStyle[]>(
 		ramdomList.map((v) => ({
-			...modalStyleBase,
 			content: {
-				...modalStyleBase.content,
 				top: `${Math.random() * 70}%`,
 				left: `${Math.random() * 65}%`,
 				background: `center / contain url('/ads/popup${v}.webp')`,
@@ -88,9 +86,7 @@ export const useSpeedGame = () => {
 		setColor("blue")
 		setTimeout(setColor, 500, "yellow")
 		const newModalsStyle = ramdomList.map((v) => ({
-			...modalStyleBase,
 			content: {
-				...modalStyleBase.content,
 				top: `${Math.random() * 70}%`,
 				left: `${Math.random() * 65}%`,
 				background: `center / contain url('/ads/popup${v}.webp')`,

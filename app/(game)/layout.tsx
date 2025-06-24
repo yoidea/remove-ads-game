@@ -8,5 +8,9 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode
 }) {
-	return <div>{children}</div>
+	return (
+		<div className="flex items-center h-screen bg-white">
+			<div className="container">{children}</div>
+		</div>
+	)
 }

@@ -6,7 +6,7 @@ import Fig2 from "../public/introduction/fig2.webp"
 
 export default async function Home() {
 	return (
-		<main className="relative flex min-h-screen flex-col items-center justify-center md:my-20 max-w-3xl mx-auto">
+		<main className="relative flex min-h-screen flex-col items-center justify-center lg:my-20 max-w-3xl mx-auto">
 			<h1 className="text-4xl sm:text-7xl font-bold">ポップアップ広告消し</h1>
 			<Link href="/speed">
 				<Image src={Fig1} alt="速さチャレンジ" />
