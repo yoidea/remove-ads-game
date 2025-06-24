@@ -34,7 +34,7 @@ export const useAimingGame = () => {
 		ramdomList.map((v) => ({
 			content: {
 				top: `${Math.random() * 70}%`,
-				left: `${Math.random() * 65}%`,
+				left: `${Math.random() * 60}%`,
 				background: `center / contain url('/ads/popup${v}.webp')`,
 			},
 		})),
@@ -99,7 +99,7 @@ export const useAimingGame = () => {
 		const newModalsStyle = ramdomList.map((v) => ({
 			content: {
 				top: `${Math.random() * 70}%`,
-				left: `${Math.random() * 65}%`,
+				left: `${Math.random() * 60}%`,
 				background: `center / contain url('/ads/popup${v}.webp')`,
 			},
 		}))

@@ -50,14 +50,10 @@ html {
 }
 .start-btn {
   position: relative;
-  width: 70%;
-  height: 12%;
   z-index: 30;
-  top: 80%;
+  top: 70%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 2rem !important;
-  padding: 10px 20px;
   box-sizing: border-box;
   border-radius: 20px !important;
   overflow: hidden;
@@ -301,15 +297,14 @@ html {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1000;
   background-color: rgba(0, 0, 0, 0.5);
 }
 
 .initial-ad-content {
   position: absolute;
-  top: 20%;
-  left: 7.5%;
-  margin: auto;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 85%;
   height: 75%;
 }
@@ -317,6 +312,7 @@ html {
 .popup-ad-overlay {
   position: fixed;
   inset: 0;
+  top: 15%;
   background-color: rgba(0, 0, 0, 0);
   touch-action: none;
   pointer-events: none;
@@ -329,7 +325,6 @@ html {
   aspect-ratio: 1 / 1;
   touch-action: none;
   pointer-events: auto;
-  margin-top: 25%;
 }
 
 .fullscreen-ad-overlay {
@@ -364,12 +359,10 @@ html {
 
 @media (min-width: 768px) {
   .initial-ad-content {
-    position: absolute;
-    left: 4rem;
-    right: 4rem;
-    bottom: 4rem;
-    width: 85%;
-    height: 75%;
+    width: auto;
+    height: 80vh;
+    max-height: 80vh;
+    aspect-ratio: 3 / 4;
   }
   .score-board-btn2 {
     width: 35%;
