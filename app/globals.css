@@ -43,22 +43,17 @@ html {
   top: 65%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 1.5em;
   padding: 10px 20px;
-  width: 35%;
+  width: 60%;
   height: 8%;
-  font-size: 2rem !important;
+  font-size: 1.5rem !important;
 }
 .start-btn {
   position: relative;
-  width: 50%;
-  height: 15%;
   z-index: 30;
-  top: 80%;
+  top: 70%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 2.5rem !important;
-  padding: 10px 20px;
   box-sizing: border-box;
   border-radius: 20px !important;
   overflow: hidden;
@@ -103,11 +98,12 @@ html {
 
 .life-container {
   position: relative;
-  width: 200px;
-  height: 160px;
+  width: 120px;
+  height: 120px;
 }
 .life-container p {
-  margin-top: 6.5em;
+  margin-top: 5.5em;
+  font-size: 0.8rem;
 }
 
 .life {
@@ -115,7 +111,7 @@ html {
   top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 4em;
+  font-size: 2.5em;
   color: grey;
   text-align: center;
 }
@@ -125,11 +121,12 @@ html {
 
 .timer-container {
   position: relative;
-  width: 160px;
-  height: 160px;
+  width: 120px;
+  height: 120px;
 }
 .timer-container p {
   margin-top: -3.5em;
+  font-size: 0.8rem;
 }
 
 .timer-circle {
@@ -141,7 +138,7 @@ html {
   top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 5em;
+  font-size: 3.5em;
   color: white;
   text-align: center;
 }
@@ -150,7 +147,7 @@ html {
   top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 3.5em;
+  font-size: 2.5em;
   color: white;
   text-align: center;
 }
@@ -213,9 +210,9 @@ html {
   color: #fff;
   display: flex;
   font-size: 50px;
-  height: 250px;
   justify-content: center;
   position: fixed;
+  height: 20%;
   width: 100%;
   left: 0;
   z-index: 25;
@@ -241,19 +238,19 @@ html {
 
 @keyframes move-cat {
   0% {
-    transform: translate(0, 0);
+    transform: translate(0%, 0%);
   }
   25% {
-    transform: translate(300px, 300px);
+    transform: translate(120%, 90%);
   }
   50% {
-    transform: translate(270px, 30px);
+    transform: translate(50%, 20%);
   }
   75% {
-    transform: translate(0px, 270px);
+    transform: translate(10%, 50%);
   }
   100% {
-    transform: translate(0, 0);
+    transform: translate(0%, 0%);
   }
 }
 
@@ -261,4 +258,143 @@ html {
   height: 3em;
   width: 20%;
   margin-top: 120px;
+}
+
+.modal-overlay {
+  touch-action: none;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0);
+}
+
+.modal-content {
+  margin-top: 10rem;
+  touch-action: none;
+  pointer-events: auto;
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 10px;
+  font-size: 6rem;
+  display: flex;
+}
+
+.icon-close {
+  font-size: 2rem;
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  color: white;
+}
+
+.initial-ad-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.initial-ad-content {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 85%;
+  height: 75%;
+}
+
+.popup-ad-overlay {
+  position: fixed;
+  inset: 0;
+  top: 15%;
+  background-color: rgba(0, 0, 0, 0);
+  touch-action: none;
+  pointer-events: none;
+}
+
+.popup-ad-content {
+  position: absolute;
+  border-radius: 10px;
+  width: 40%;
+  aspect-ratio: 1 / 1;
+  touch-action: none;
+  pointer-events: auto;
+}
+
+.fullscreen-ad-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.fullscreen-ad-content {
+  position: absolute;
+  top: 20%;
+  left: 7.5%;
+  margin: auto;
+  width: 85%;
+  height: 75%;
+}
+
+.icon-skip {
+  position: absolute;
+  width: 40%;
+  top: 0.5rem;
+  right: 1rem;
+  color: white;
+  border: white;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+}
+
+@media (min-width: 768px) {
+  .initial-ad-content {
+    width: auto;
+    height: 80vh;
+    max-height: 80vh;
+    aspect-ratio: 3 / 4;
+  }
+  .score-board-btn2 {
+    width: 35%;
+    font-size: 2rem !important;
+  }
+  .start-btn {
+    width: 50%;
+    height: 15%;
+    font-size: 2.5rem !important;
+  }
+  .life-container {
+    width: 200px;
+    height: 160px;
+  }
+  .life-container p {
+    margin-top: 6.5em;
+    font-size: 1rem;
+  }
+  .life {
+    font-size: 4em;
+  }
+  .timer-container {
+    width: 160px;
+    height: 160px;
+  }
+  .timer-container p {
+    font-size: 1rem;
+  }
+  .timer-time {
+    font-size: 5em;
+  }
+  .size {
+    font-size: 3.5em;
+  }
 }
