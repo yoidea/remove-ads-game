@@ -1,4 +1,4 @@
-import { HUE_BRIDGE_IP, HUE_USER } from "./constants"
+import { HUE_BRIDGE_IP, HUE_USER, DEVICE, DEVICE_NAME } from "./constants"
 
 const request2hue = (body: any) => {
 	const url = `http://${HUE_BRIDGE_IP}/api`
@@ -9,6 +9,7 @@ const request2hue = (body: any) => {
 }
 
 export const setColor = (color: "red" | "green" | "yellow" | "blue") => {
+	if (DEVICE !== DEVICE_NAME.ARCADE) return
 	console.log(`Set color to "${color}"`)
 	const value = {
 		red: 65403,
