@@ -51,7 +51,7 @@ html {
 .start-btn {
   position: relative;
   z-index: 30;
-  top: 70%;
+  top: 72%;
   left: 50%;
   transform: translate(-50%, -50%);
   box-sizing: border-box;
@@ -396,5 +396,22 @@ html {
   }
   .size {
     font-size: 3.5em;
+  }
+}
+
+@media (max-width: 768px) {
+  .start-btn {
+    height: 9%;
+    top: 66%;
+    left: 50%;
+    font-size: 1rem !important;
+    border-radius: 12px !important;
+  }
+  .start-btn::after {
+    left: 5px !important;
+    top: 5px !important;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    border-radius: 7px;
   }
 }
