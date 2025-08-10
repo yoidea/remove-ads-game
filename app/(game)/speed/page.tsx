@@ -3,13 +3,17 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import { useSpeedGame } from "@/features/speed/hooks/useSpeedGame"
 import { usePointerEffect } from "@/hooks/usePointerEffect"
+import { useSound } from "@/hooks/useSound"
 import { InitialAd } from "@/components/game/InitialAd"
 import { PopupAds } from "@/features/speed/components/PopupAds"
 import { FullScreenAd } from "@/components/game/FullScreenAd"
 import { ScoreBoard } from "@/components/game/ScoreBoard"
 import { Pointer } from "@/components/game/Pointer"
+import { VolumeControl } from "@/components/ui/VolumeControl"
 
 export default function SpeedPage() {
+	const { playSound, stopBGM, setBGM, volume, setVolume } = useSound()
+
 	const {
 		countDestroy,
 		setCountDestroy,
@@ -28,15 +32,15 @@ export default function SpeedPage() {
 		handleTapMissArea,
 		handleTapButton,
 		regenerateModalsStyle,
-		playSound,
 		TIMER_SECONDS,
 		NUMBER_OF_ADS,
-	} = useSpeedGame()
+	} = useSpeedGame({ playSound, stopBGM, setBGM })
 
 	const { pointer, pointerDisplay } = usePointerEffect()
 
 	return (
 		<>
+			<VolumeControl onVolumeChange={setVolume} initialVolume={volume} playing={playing} />
 			<InitialAd
 				isOpen={initialAdOpen}
 				onStart={handleGameStart}

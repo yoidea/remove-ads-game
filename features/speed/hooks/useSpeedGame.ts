@@ -1,15 +1,23 @@
 "use client"
 import { useState, useEffect, useCallback } from "react"
 import { useTimer } from "react-timer-hook"
-import { useSound } from "@/hooks/useSound"
 import { setColor } from "@/lib/hue"
 import { useGame } from "@/hooks/useGame"
 
 const NUMBER_OF_ADS = 10
 const TIMER_SECONDS = 30
 
-export const useSpeedGame = () => {
-	const { playSound, stopBGM, setBGM } = useSound()
+interface SoundFunctions {
+	playSound: (name: string) => void
+	stopBGM: () => void
+	setBGM: (name: string) => void
+}
+
+export const useSpeedGame = ({
+	playSound,
+	stopBGM,
+	setBGM,
+}: SoundFunctions) => {
 	const [gameClear, setGameClear] = useState(false)
 	const [playing, setPlaying] = useState(false)
 	const [showOverlay, setShowOverlay] = useState(false)
@@ -114,7 +122,6 @@ export const useSpeedGame = () => {
 		handleTapMissArea,
 		handleTapButton,
 		regenerateModalsStyle,
-		playSound,
 		TIMER_SECONDS,
 		NUMBER_OF_ADS,
 	}

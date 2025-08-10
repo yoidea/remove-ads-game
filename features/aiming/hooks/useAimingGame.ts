@@ -10,9 +10,17 @@ const NUMBER_OF_ADS = 5
 const MAX_LIFE = 3
 const DEFAULT_BUTTON_SIZE = 20
 
-export const useAimingGame = () => {
-	const { playSound, stopBGM, setBGM } = useSound()
-	// 個別ゲーム状態
+interface SoundFunctions {
+	playSound: (name: string) => void
+	stopBGM: () => void
+	setBGM: (name: string) => void
+}
+
+export const useAimingGame = ({
+	playSound,
+	stopBGM,
+	setBGM,
+}: SoundFunctions) => {
 	const [life, setLife] = useState(MAX_LIFE)
 	const [buttonSize, setButtonSize] = useState(DEFAULT_BUTTON_SIZE)
 	const [gameClear, setGameClear] = useState(false)
@@ -115,7 +123,6 @@ export const useAimingGame = () => {
 		handleTapMissArea,
 		handleTapButton,
 		regenerateModalsStyle,
-		playSound,
 		NUMBER_OF_ADS,
 		MAX_LIFE,
 	}
