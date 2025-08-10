@@ -5,18 +5,12 @@ import { ModalContentStyle } from "@/types"
 
 /**
  * 共通ゲームロジック（ポップアップ広告の生成/配置、開閉状態管理、初期/全画面広告、破壊/ミス回数など）
- * 個別ゲーム（例: Aiming, Speed）はこのフックを利用し、固有要素（ライフ/タイマー/サイズ調整等）だけを追加する。
  */
 export interface UseGameOptions {
-	/** ArrowRight 押下時に呼ばれる（ゲーム開始処理を上位で定義） */
 	onStart?: () => void
-	/** 左矢印で戻るパス */
 	backPath?: string
-	/** 乱数で使う最大広告番号 ( /public/ads/popup{n}.webp ) */
 	maxAdIndex?: number
-	/** 生成時の top% の最大値 (0-100) */
 	maxTopPercent?: number
-	/** 生成時の left% の最大値 (0-100) */
 	maxLeftPercent?: number
 }
 
@@ -113,7 +107,6 @@ export const useGame = (
 		setCountMistake(0)
 	}, [])
 
-	// 共通キーハンドラ: ← で戻る / → で開始
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.code === "ArrowLeft") {
