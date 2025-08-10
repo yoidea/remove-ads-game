@@ -3,6 +3,7 @@ import { useState } from "react"
 interface VolumeControlProps {
 	onVolumeChange: (volume: number) => void
 	initialVolume?: number
+	playing?: boolean
 }
 
 interface VolumeIconProps {
@@ -35,6 +36,7 @@ const VolumeIcon = ({ isMuted, volume }: VolumeIconProps) => {
 export const VolumeControl = ({
 	onVolumeChange,
 	initialVolume = 0.3,
+	playing = false,
 }: VolumeControlProps) => {
 	const [volume, setVolume] = useState(initialVolume)
 	const [isMuted, setIsMuted] = useState(false)
@@ -64,7 +66,7 @@ export const VolumeControl = ({
 	}
 
 	return (
-		<div className="fixed top-4 left-4 flex items-center gap-2 bg-black/20 backdrop-blur-sm rounded-lg p-2 z-50">
+		<div className={`fixed top-4 left-4 flex items-center gap-2 bg-black/20 backdrop-blur-sm rounded-lg p-2 z-50 ${playing ? 'max-md:hidden' : ''}`}>
 			<button
 				onClick={toggleMute}
 				className="text-white hover:text-gray-300 transition-colors"
