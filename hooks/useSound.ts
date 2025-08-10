@@ -11,7 +11,9 @@ const soundFiles = [
 	"clear",
 	"bgm",
 	"bgm2",
-]
+] as const
+
+export type SoundName = (typeof soundFiles)[number]
 
 export const useSound = () => {
 	const audioContextRef = useRef<AudioContext | null>(null)
@@ -56,7 +58,7 @@ export const useSound = () => {
 		}
 	}, [])
 
-	const playSound = (name: string) => {
+	const playSound = (name: SoundName) => {
 		const buffer = audioBuffersRef.current[name]
 		if (audioContextRef.current && buffer) {
 			const source = audioContextRef.current.createBufferSource()
@@ -68,7 +70,7 @@ export const useSound = () => {
 
 	const stopBGM = () => {
 		if (BGMSourceRef.current) {
-		// 二重停止例外ガード
+			// 二重停止例外ガード
 			try {
 				BGMSourceRef.current.stop()
 			} catch {}
@@ -79,7 +81,7 @@ export const useSound = () => {
 		}
 	}
 
-	const setBGM = (name: string) => {
+	const setBGM = (name: Extract<SoundName, "bgm" | "bgm2">) => {
 		const buffer = audioBuffersRef.current[name]
 		if (audioContextRef.current && buffer) {
 			const gain = audioContextRef.current.createGain()

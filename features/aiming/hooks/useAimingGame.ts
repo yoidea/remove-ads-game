@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react"
 import { useSound } from "@/hooks/useSound"
 import { setColor } from "@/lib/hue"
 import { useGame } from "@/hooks/useGame"
+import { calcNextButtonSize } from "@/features/aiming/utils/calcButtonSize"
 
 const NUMBER_OF_ADS = 5
 const MAX_LIFE = 3
@@ -67,16 +68,7 @@ export const useAimingGame = () => {
 		playSound("open")
 		setColor("blue")
 		setTimeout(() => setColor("yellow"), 500)
-		setButtonSize((prev) => {
-			if (prev > 15) return prev - 5
-			if (prev > 7) return prev - 3
-			if (prev > 5) return prev - 2
-			if (prev > 3) return prev - 1
-			if (prev > 2) return (prev * 10 - 5) / 10
-			if (prev > 1) return (prev * 10 - 2) / 10
-			if (prev > 0.1) return (prev * 10 - 1) / 10
-			return 0.1
-		})
+		setButtonSize(calcNextButtonSize)
 		regenerateModalsStyleBase()
 	}
 

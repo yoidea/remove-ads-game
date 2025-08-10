@@ -339,9 +339,8 @@ html {
 }
 
 .fullscreen-ad-content {
-  position: absolute;
+  position: relative;
   top: 20%;
-  left: 7.5%;
   margin: auto;
   width: 85%;
   height: 75%;

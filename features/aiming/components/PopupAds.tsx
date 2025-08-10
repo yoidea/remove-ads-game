@@ -1,6 +1,7 @@
 "use client"
 
 import { CustomModal } from "@/components/ui/CustomModal"
+import { SoundName } from "@/hooks/useSound"
 import { ModalContentStyle } from "@/types"
 
 interface PopupAdsProps {
@@ -9,7 +10,7 @@ interface PopupAdsProps {
 	life: number
 	handleGameClear: () => void
 	handleTapMissArea: () => void
-	playSound: (sound: string) => void
+	playSound: (sound: SoundName) => void
 	setModalsOpen: (modals: boolean[]) => void
 	regenerateModalsStyle: () => void
 	handleTapButton: () => void
@@ -57,7 +58,7 @@ export const PopupAds = ({
 						<button
 							onClick={(e) => {
 								e.stopPropagation()
-								playSound(`close${Math.ceil(Math.random() * 3)}`)
+								playSound(`close${Math.ceil(Math.random() * 3)}` as SoundName)
 								const prev = [...modalsOpen]
 								prev[key] = false
 								setModalsOpen(prev)

@@ -71,16 +71,11 @@ export const useGame = (
 	const [countMistake, setCountMistake] = useState(0)
 	const [initialAdOpen, setInitialAdOpen] = useState(true)
 	const [fullScreenAdOpen, setFullScreenAdOpen] = useState(false)
-	const [modalsOpen, setModalsOpen] = useState<boolean[]>(
-		() => Array(numberOfAds).fill(false),
+	const [modalsOpen, setModalsOpen] = useState<boolean[]>(() =>
+		Array(numberOfAds).fill(false),
 	)
 	const [modalsStyle, setModalsStyle] = useState<ModalContentStyle[]>(() =>
-		createRandomStyles(
-			numberOfAds,
-			maxAdIndex,
-			maxTopPercent,
-			maxLeftPercent,
-		),
+		createRandomStyles(numberOfAds, maxAdIndex, maxTopPercent, maxLeftPercent),
 	)
 
 	const regenerateModalsStyleBase = useCallback(() => {
@@ -141,4 +136,3 @@ export const useGame = (
 }
 
 export default useGame
-

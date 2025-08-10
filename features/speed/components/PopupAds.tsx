@@ -2,12 +2,13 @@
 
 import { CustomModal } from "@/components/ui/CustomModal"
 import { ModalContentStyle } from "@/types"
+import { SoundName } from "@/hooks/useSound"
 
 interface PopupAdsProps {
 	modalsStyle: ModalContentStyle[]
 	modalsOpen: boolean[]
 	handleTapMissArea: () => void
-	playSound: (sound: string) => void
+	playSound: (sound: SoundName) => void
 	setModalsOpen: (modals: boolean[]) => void
 	regenerateModalsStyle: () => void
 	handleTapButton: () => void
@@ -45,7 +46,7 @@ export const PopupAds = ({
 						<button
 							onClick={(e: React.MouseEvent) => {
 								e.stopPropagation()
-								playSound(`close${Math.ceil(Math.random() * 3)}`)
+								playSound(`close${Math.ceil(Math.random() * 3)}` as SoundName)
 								const prev = [...modalsOpen]
 								prev[key] = false
 								setModalsOpen(prev)
