@@ -33,6 +33,26 @@ export const useSound = () => {
 					})
 					.catch((error) => console.error("Audio error", error))
 			})
+
+			const handleLifecycleStop = () => {
+				stopBGM()
+			}
+			window.addEventListener("pagehide", handleLifecycleStop)
+			window.addEventListener("popstate", handleLifecycleStop)
+			document.addEventListener("visibilitychange", () => {
+				if (document.visibilityState === "hidden") handleLifecycleStop()
+			})
+
+			return () => {
+				try {
+					stopBGM()
+					window.removeEventListener("pagehide", handleLifecycleStop)
+					window.removeEventListener("popstate", handleLifecycleStop)
+					if (audioContextRef.current?.state !== "closed") {
+						audioContextRef.current?.close().catch(() => {})
+					}
+				} catch {}
+			}
 		}
 	}, [])
 
@@ -48,8 +68,14 @@ export const useSound = () => {
 
 	const stopBGM = () => {
 		if (BGMSourceRef.current) {
-			BGMSourceRef.current.stop()
-			BGMSourceRef.current.disconnect()
+		// 二重停止例外ガード
+			try {
+				BGMSourceRef.current.stop()
+			} catch {}
+			try {
+				BGMSourceRef.current.disconnect()
+			} catch {}
+			BGMSourceRef.current = null
 		}
 	}
 
