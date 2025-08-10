@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useSound } from "@/hooks/useSound"
 import { setColor } from "@/lib/hue"
 import { ModalContentStyle } from "@/types"
 
@@ -9,8 +8,17 @@ const NUMBER_OF_ADS = 5
 const MAX_LIFE = 3
 const DEFAULT_BUTTON_SIZE = 20
 
-export const useAimingGame = () => {
-	const { playSound, stopBGM, setBGM } = useSound()
+interface SoundFunctions {
+	playSound: (name: string) => void
+	stopBGM: () => void
+	setBGM: (name: string) => void
+}
+
+export const useAimingGame = ({
+	playSound,
+	stopBGM,
+	setBGM,
+}: SoundFunctions) => {
 	const [countDestroy, setCountDestroy] = useState(0)
 	const [countMistake, setCountMistake] = useState(0)
 	const [life, setLife] = useState(MAX_LIFE)
@@ -159,7 +167,6 @@ export const useAimingGame = () => {
 		handleTapMissArea,
 		handleTapButton,
 		regenerateModalsStyle,
-		playSound,
 		NUMBER_OF_ADS,
 		MAX_LIFE,
 	}

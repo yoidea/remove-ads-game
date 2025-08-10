@@ -3,13 +3,17 @@ import React from "react"
 import "bootstrap/dist/css/bootstrap.min.css"
 import { useAimingGame } from "@/features/aiming/hooks/useAimingGame"
 import { usePointerEffect } from "@/hooks/usePointerEffect"
+import { useSound } from "@/hooks/useSound"
 import { InitialAd } from "@/components/game/InitialAd"
 import { PopupAds } from "@/features/aiming/components/PopupAds"
 import { FullScreenAd } from "@/components/game/FullScreenAd"
 import { ScoreBoard } from "@/components/game/ScoreBoard"
 import { Pointer } from "@/components/game/Pointer"
+import { VolumeControl } from "@/components/ui/VolumeControl"
 
 export default function AimingPage() {
+	const { playSound, stopBGM, setBGM, volume, setVolume } = useSound()
+
 	const {
 		countDestroy,
 		setCountDestroy,
@@ -29,15 +33,15 @@ export default function AimingPage() {
 		handleTapMissArea,
 		handleTapButton,
 		regenerateModalsStyle,
-		playSound,
 		NUMBER_OF_ADS,
 		MAX_LIFE,
-	} = useAimingGame()
+	} = useAimingGame({ playSound, stopBGM, setBGM })
 
 	const { pointer, pointerDisplay } = usePointerEffect()
 
 	return (
 		<>
+			<VolumeControl onVolumeChange={setVolume} initialVolume={volume} />
 			<InitialAd
 				isOpen={initialAdOpen}
 				onStart={handleGameStart}

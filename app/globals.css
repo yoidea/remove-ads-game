@@ -357,6 +357,23 @@ html {
   border-radius: 4px;
 }
 
+				.slider::-webkit-slider-thumb {
+					appearance: none;
+					height: 12px;
+					width: 12px;
+					border-radius: 50%;
+					background: white;
+					cursor: pointer;
+				}
+				.slider::-moz-range-thumb {
+					height: 12px;
+					width: 12px;
+					border-radius: 50%;
+					background: white;
+					cursor: pointer;
+					border: none;
+				}
+
 @media (min-width: 768px) {
   .initial-ad-content {
     width: auto;
