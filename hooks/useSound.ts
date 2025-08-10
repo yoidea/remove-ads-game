@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useState } from "react"
 
 const soundFiles = [
 	"start",
@@ -17,12 +17,18 @@ export const useSound = () => {
 	const audioContextRef = useRef<AudioContext | null>(null)
 	const audioBuffersRef = useRef<{ [key: string]: AudioBuffer }>({})
 	const BGMSourceRef = useRef<AudioBufferSourceNode | null>(null)
+	const masterGainRef = useRef<GainNode | null>(null)
+	const [volume, setVolume] = useState(1.0)
 
 	useEffect(() => {
 		if (typeof window !== "undefined") {
 			const audioContext = new AudioContext()
 			audioContextRef.current = audioContext
-			BGMSourceRef.current = audioContextRef.current.createBufferSource()
+
+			const masterGain = audioContext.createGain()
+			masterGain.gain.value = 1.0
+			masterGain.connect(audioContext.destination)
+			masterGainRef.current = masterGain
 
 			soundFiles.forEach((sound) => {
 				fetch(`/${sound}.mp3`)
@@ -36,12 +42,18 @@ export const useSound = () => {
 		}
 	}, [])
 
+	useEffect(() => {
+		if (masterGainRef.current) {
+			masterGainRef.current.gain.value = volume
+		}
+	}, [volume])
+
 	const playSound = (name: string) => {
 		const buffer = audioBuffersRef.current[name]
-		if (audioContextRef.current && buffer) {
+		if (audioContextRef.current && buffer && masterGainRef.current) {
 			const source = audioContextRef.current.createBufferSource()
 			source.buffer = buffer
-			source.connect(audioContextRef.current.destination)
+			source.connect(masterGainRef.current)
 			source.start(0)
 		}
 	}
@@ -55,18 +67,18 @@ export const useSound = () => {
 
 	const setBGM = (name: string) => {
 		const buffer = audioBuffersRef.current[name]
-		if (audioContextRef.current && buffer) {
+		if (audioContextRef.current && buffer && masterGainRef.current) {
 			const gain = audioContextRef.current.createGain()
 			gain.gain.value = 0.3
 			const source = audioContextRef.current.createBufferSource()
 			source.buffer = buffer
 			source.loop = true
 			source.connect(gain)
-			gain.connect(audioContextRef.current.destination)
+			gain.connect(masterGainRef.current)
 			source.start(0)
 			BGMSourceRef.current = source
 		}
 	}
 
-	return { playSound, stopBGM, setBGM }
+	return { playSound, stopBGM, setBGM, volume, setVolume }
 }
