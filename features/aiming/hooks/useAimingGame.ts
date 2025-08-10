@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { useSound } from "@/hooks/useSound"
+import { SoundName } from "@/hooks/useSound"
 import { setColor } from "@/lib/hue"
 import { useGame } from "@/hooks/useGame"
 import { calcNextButtonSize } from "@/features/aiming/utils/calcButtonSize"
@@ -11,9 +11,9 @@ const MAX_LIFE = 3
 const DEFAULT_BUTTON_SIZE = 20
 
 interface SoundFunctions {
-	playSound: (name: string) => void
+	playSound: (name: SoundName) => void
 	stopBGM: () => void
-	setBGM: (name: string) => void
+	setBGM: (name: Extract<SoundName, "bgm" | "bgm2">) => void
 }
 
 export const useAimingGame = ({

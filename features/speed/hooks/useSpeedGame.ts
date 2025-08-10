@@ -3,14 +3,15 @@ import { useState, useEffect, useCallback } from "react"
 import { useTimer } from "react-timer-hook"
 import { setColor } from "@/lib/hue"
 import { useGame } from "@/hooks/useGame"
+import { SoundName } from "@/hooks/useSound"
 
 const NUMBER_OF_ADS = 10
 const TIMER_SECONDS = 30
 
 interface SoundFunctions {
-	playSound: (name: string) => void
+	playSound: (name: SoundName) => void
 	stopBGM: () => void
-	setBGM: (name: string) => void
+	setBGM: (name: Extract<SoundName, "bgm" | "bgm2">) => void
 }
 
 export const useSpeedGame = ({

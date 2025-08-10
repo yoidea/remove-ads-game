@@ -40,7 +40,11 @@ export default function SpeedPage() {
 
 	return (
 		<>
-			<VolumeControl onVolumeChange={setVolume} initialVolume={volume} playing={playing} />
+			<VolumeControl
+				onVolumeChange={setVolume}
+				initialVolume={volume}
+				playing={playing}
+			/>
 			<InitialAd
 				isOpen={initialAdOpen}
 				onStart={handleGameStart}

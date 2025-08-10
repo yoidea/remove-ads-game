@@ -66,7 +66,9 @@ export const VolumeControl = ({
 	}
 
 	return (
-		<div className={`fixed top-4 left-4 flex items-center gap-2 bg-black/20 backdrop-blur-sm rounded-lg p-2 z-50 ${playing ? 'max-md:hidden' : ''}`}>
+		<div
+			className={`fixed top-4 left-4 flex items-center gap-2 bg-black/20 backdrop-blur-sm rounded-lg p-2 z-50 ${playing ? "max-md:hidden" : ""}`}
+		>
 			<button
 				onClick={toggleMute}
 				className="text-white hover:text-gray-300 transition-colors"
