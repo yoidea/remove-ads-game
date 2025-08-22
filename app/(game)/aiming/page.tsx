@@ -1,5 +1,5 @@
 "use client"
-import React from "react"
+
 import "bootstrap/dist/css/bootstrap.min.css"
 import { useAimingGame } from "@/features/aiming/hooks/useAimingGame"
 import { usePointerEffect } from "@/hooks/usePointerEffect"
@@ -41,7 +41,11 @@ export default function AimingPage() {
 
 	return (
 		<>
-			<VolumeControl onVolumeChange={setVolume} initialVolume={volume} playing={playing} />
+			<VolumeControl
+				onVolumeChange={setVolume}
+				initialVolume={volume}
+				playing={playing}
+			/>
 			<InitialAd
 				isOpen={initialAdOpen}
 				onStart={handleGameStart}

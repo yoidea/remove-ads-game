@@ -11,7 +11,9 @@ const soundFiles = [
 	"clear",
 	"bgm",
 	"bgm2",
-]
+] as const
+
+export type SoundName = (typeof soundFiles)[number]
 
 export const useSound = () => {
 	const audioContextRef = useRef<AudioContext | null>(null)
@@ -39,6 +41,26 @@ export const useSound = () => {
 					})
 					.catch((error) => console.error("Audio error", error))
 			})
+
+			const handleLifecycleStop = () => {
+				stopBGM()
+			}
+			window.addEventListener("pagehide", handleLifecycleStop)
+			window.addEventListener("popstate", handleLifecycleStop)
+			document.addEventListener("visibilitychange", () => {
+				if (document.visibilityState === "hidden") handleLifecycleStop()
+			})
+
+			return () => {
+				try {
+					stopBGM()
+					window.removeEventListener("pagehide", handleLifecycleStop)
+					window.removeEventListener("popstate", handleLifecycleStop)
+					if (audioContextRef.current?.state !== "closed") {
+						audioContextRef.current?.close().catch(() => {})
+					}
+				} catch {}
+			}
 		}
 	}, [])
 
@@ -48,7 +70,13 @@ export const useSound = () => {
 		}
 	}, [volume])
 
-	const playSound = (name: string) => {
+	useEffect(() => {
+		if (masterGainRef.current) {
+			masterGainRef.current.gain.value = volume
+		}
+	}, [volume])
+
+	const playSound = (name: SoundName) => {
 		const buffer = audioBuffersRef.current[name]
 		if (audioContextRef.current && buffer && masterGainRef.current) {
 			const source = audioContextRef.current.createBufferSource()
@@ -60,12 +88,18 @@ export const useSound = () => {
 
 	const stopBGM = () => {
 		if (BGMSourceRef.current) {
-			BGMSourceRef.current.stop()
-			BGMSourceRef.current.disconnect()
+			// 二重停止例外ガード
+			try {
+				BGMSourceRef.current.stop()
+			} catch {}
+			try {
+				BGMSourceRef.current.disconnect()
+			} catch {}
+			BGMSourceRef.current = null
 		}
 	}
 
-	const setBGM = (name: string) => {
+	const setBGM = (name: Extract<SoundName, "bgm" | "bgm2">) => {
 		const buffer = audioBuffersRef.current[name]
 		if (audioContextRef.current && buffer && masterGainRef.current) {
 			const gain = audioContextRef.current.createGain()

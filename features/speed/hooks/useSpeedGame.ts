@@ -1,16 +1,17 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useTimer } from "react-timer-hook"
 import { setColor } from "@/lib/hue"
-import { ModalContentStyle } from "@/types"
+import { useGame } from "@/hooks/useGame"
+import { SoundName } from "@/hooks/useSound"
 
 const NUMBER_OF_ADS = 10
 const TIMER_SECONDS = 30
 
 interface SoundFunctions {
-	playSound: (name: string) => void
+	playSound: (name: SoundName) => void
 	stopBGM: () => void
-	setBGM: (name: string) => void
+	setBGM: (name: Extract<SoundName, "bgm" | "bgm2">) => void
 }
 
 export const useSpeedGame = ({
@@ -18,32 +19,26 @@ export const useSpeedGame = ({
 	stopBGM,
 	setBGM,
 }: SoundFunctions) => {
-	const [countDestroy, setCountDestroy] = useState(0)
-	const [countMistake, setCountMistake] = useState(0)
 	const [gameClear, setGameClear] = useState(false)
 	const [playing, setPlaying] = useState(false)
 	const [showOverlay, setShowOverlay] = useState(false)
-	const [modalsOpen, setModalsOpen] = useState<boolean[]>(
-		[...Array(NUMBER_OF_ADS)].fill(false),
-	)
-	const [fullScreenAdOpen, setFullScreenAdOpen] = useState<boolean>(false)
-	const [initialAdOpen, setInitialAdOpen] = useState<boolean>(true)
-
-	const ramdomList: number[] = []
-	while (ramdomList.length < NUMBER_OF_ADS) {
-		const num = Math.floor(Math.random() * 20) + 1
-		if (!ramdomList.includes(num)) ramdomList.push(num)
-	}
-
-	const [modalsStyle, setModalsStyle] = useState<ModalContentStyle[]>(
-		ramdomList.map((v) => ({
-			content: {
-				top: `${Math.random() * 70}%`,
-				left: `${Math.random() * 60}%`,
-				background: `center / contain url('/ads/popup${v}.webp')`,
-			},
-		})),
-	)
+	const {
+		countDestroy,
+		setCountDestroy,
+		countMistake,
+		setCountMistake,
+		initialAdOpen,
+		setInitialAdOpen,
+		fullScreenAdOpen,
+		setFullScreenAdOpen,
+		modalsOpen,
+		setModalsOpen,
+		modalsStyle,
+		regenerateModalsStyleBase,
+		openAllModals,
+		closeAllModals,
+		resetCounters,
+	} = useGame(NUMBER_OF_ADS)
 
 	const expiryTimestamp = new Date()
 	expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + TIMER_SECONDS)
@@ -54,57 +49,42 @@ export const useSpeedGame = ({
 		autoStart: false,
 	})
 
-	const handleGameStart = () => {
+	const handleGameStart = useCallback(() => {
 		setInitialAdOpen(false)
 		setGameClear(false)
 		setPlaying(true)
 		const expiryTimestamp = new Date()
 		expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + TIMER_SECONDS)
 		restart(expiryTimestamp)
-		setCountDestroy(0)
-		setCountMistake(0)
+		resetCounters()
 		setColor("yellow")
 		playSound("start")
 		setBGM("bgm")
-		setModalsOpen([...Array(NUMBER_OF_ADS)].fill(true))
-	}
+		openAllModals()
+	}, [playSound, setBGM, restart, openAllModals, resetCounters])
 
-	const handleGameClear = () => {
+	const handleGameClear = useCallback(() => {
 		setGameClear(true)
 		setFullScreenAdOpen(false)
 		setPlaying(false)
-		setModalsOpen([...Array(NUMBER_OF_ADS)].fill(false))
+		closeAllModals()
 		playSound("clear")
 		stopBGM()
 		setColor("green")
-		setTimeout(() => {
-			setColor("blue")
-		}, 500)
-	}
+		setTimeout(() => setColor("blue"), 500)
+	}, [closeAllModals, playSound, stopBGM])
 
 	const regenerateModalsStyle = () => {
-		const ramdomList: number[] = []
-		while (ramdomList.length < NUMBER_OF_ADS) {
-			const num = Math.floor(Math.random() * 20) + 1
-			if (!ramdomList.includes(num)) ramdomList.push(num)
-		}
 		playSound("open")
 		setShowOverlay(true)
 		setTimeout(setShowOverlay, 3000, false)
 		setColor("blue")
-		setTimeout(setColor, 500, "yellow")
-		const newModalsStyle = ramdomList.map((v) => ({
-			content: {
-				top: `${Math.random() * 70}%`,
-				left: `${Math.random() * 60}%`,
-				background: `center / contain url('/ads/popup${v}.webp')`,
-			},
-		}))
-		setModalsStyle(newModalsStyle)
+		setTimeout(() => setColor("yellow"), 500)
+		regenerateModalsStyleBase()
 	}
 
 	const handleTapMissArea = () => {
-		setCountMistake(countMistake + 1)
+		setCountMistake((m) => m + 1)
 		setShowOverlay(false)
 		setFullScreenAdOpen(true)
 		playSound("miss")
@@ -113,25 +93,17 @@ export const useSpeedGame = ({
 
 	const handleTapButton = () => {
 		setColor("green")
-		setTimeout(() => {
-			setColor("yellow")
-		}, 500)
+		setTimeout(() => setColor("yellow"), 500)
 	}
 
+	// ArrowRight でも開始（useGame は onStart 未指定）
 	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.code === "ArrowLeft") {
-				window.location.href = "/"
-			}
-			if (e.code === "ArrowRight") {
-				handleGameStart()
-			}
+		const handler = (e: KeyboardEvent) => {
+			if (e.code === "ArrowRight") handleGameStart()
 		}
-		window.addEventListener("keydown", handleKeyDown)
-		return () => {
-			window.removeEventListener("keydown", handleKeyDown)
-		}
-	}, [])
+		window.addEventListener("keydown", handler)
+		return () => window.removeEventListener("keydown", handler)
+	}, [handleGameStart])
 
 	return {
 		countDestroy,

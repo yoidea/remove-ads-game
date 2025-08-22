@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react"
 import { CustomModal } from "@/components/ui/CustomModal"
 import { setColor } from "@/lib/hue"
+import { SoundName } from "@/hooks/useSound"
 
 interface FullScreenAdProps {
 	isOpen: boolean
 	onClose: () => void
-	playSound: (sound: string) => void
+	playSound: (sound: SoundName) => void
 }
 
 export const FullScreenAd = ({
@@ -15,25 +16,26 @@ export const FullScreenAd = ({
 	onClose,
 	playSound,
 }: FullScreenAdProps) => {
-	const [buttonText, setButtonText] = useState("2秒後にスキップ")
+	const [secondsLeft, setSecondsLeft] = useState(2)
 	const [buttonEnabled, setButtonEnabled] = useState(false)
 
 	useEffect(() => {
-		if (isOpen) {
-			setButtonText("2秒後にスキップ")
-			setButtonEnabled(false)
-			const timer1 = setTimeout(() => setButtonText("1秒後にスキップ"), 1000)
-			const timer2 = setTimeout(() => {
-				setButtonText("広告をスキップ")
+		if (!isOpen) return
+		setSecondsLeft(2)
+		setButtonEnabled(false)
+		let current = 2
+		const id = setInterval(() => {
+			current -= 1
+			if (current <= 0) {
+				setSecondsLeft(0)
 				setButtonEnabled(true)
 				setColor("green")
-			}, 2000)
-
-			return () => {
-				clearTimeout(timer1)
-				clearTimeout(timer2)
+				clearInterval(id)
+			} else {
+				setSecondsLeft(current)
 			}
-		}
+		}, 1000)
+		return () => clearInterval(id)
 	}, [isOpen])
 
 	const handleClose = () => {
@@ -46,17 +48,21 @@ export const FullScreenAd = ({
 		setColor("yellow")
 	}
 
+	const buttonText = buttonEnabled
+		? "広告をスキップ"
+		: `${secondsLeft}秒後にスキップ`
+
 	return (
 		<CustomModal
 			isOpen={isOpen}
-			overlayClassName="fullscreen-ad-overlay max-w-4xl mx-auto"
-			contentClassName="fullscreen-ad-content max-w-4xl mx-auto"
+			overlayClassName="fullscreen-ad-overlay mx-auto"
+			contentClassName="fullscreen-ad-content max-w-3xl"
 			style={{
 				background: "url('/ads/rainbow.webp')",
 				backgroundSize: "cover",
 			}}
 		>
-			<div style={{ width: "100%", height: "100%" }}>
+			<div className="h-full max-w-4xl mx-auto">
 				<button
 					onClick={(e) => {
 						e.stopPropagation()
